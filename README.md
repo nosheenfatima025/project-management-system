@@ -323,9 +323,9 @@ Create a `.env` file:
 ```env
 PORT=5000
 
-MONGO_URI=your_mongodb_atlas_connection_string
+MONGO_URI=
 
-JWT_SECRET=your_secure_jwt_secret
+JWT_SECRET=secure_jwt_secret
 
 CLIENT_URL=http://localhost:5173
 
@@ -388,21 +388,6 @@ http://localhost:5173
 
 ---
 
-# 🔑 Environment Variables
-
-Never commit your `.env` file to GitHub.
-
-The project uses:
-
-| Variable         | Description                            |
-| ---------------- | -------------------------------------- |
-| `MONGO_URI`      | MongoDB Atlas connection string        |
-| `JWT_SECRET`     | Secret key used for JWT authentication |
-| `CLIENT_URL`     | Frontend application URL               |
-| `ADMIN_EMAIL`    | Default administrator email            |
-| `ADMIN_PASSWORD` | Administrator password                 |
-| `VITE_API_URL`   | Backend API URL for frontend           |
-
 A sample configuration is available in:
 
 ```text
@@ -437,12 +422,6 @@ The API uses JWT authentication for protected resources.
 ## Frontend — Netlify
 
 The React/Vite frontend can be deployed on Netlify.
-
-Set the environment variable:
-
-```env
-VITE_API_URL=https://your-backend-url.onrender.com/api
-```
 
 Then build the application:
 
@@ -549,33 +528,28 @@ Possible future enhancements include:
 
 ### Dashboard
 
-```text
-Add dashboard screenshot here
-```
+<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/602cd49c-c4ab-4a82-ae23-abed609c777a" />
+
 
 ### Projects
 
-```text
-Add projects screenshot here
-```
+<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/bc72eac9-d79f-46bc-a536-1736490ac9e1" />
+
 
 ### Tasks
 
-```text
-Add tasks screenshot here
-```
+<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/6185e98f-8845-4b07-81c1-0b6619920645" />
+
 
 ### Team
 
-```text
-Add team screenshot here
-```
+<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/a7cf2b89-42dc-4bb9-addf-b93e8ddac2c3" />
+
 
 ### Reports
 
-```text
-Add reports screenshot here
-```
+<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/8e4dc7d0-ab10-44a4-aa6c-2cc6cdb16448" />
+
 
 ---
 
