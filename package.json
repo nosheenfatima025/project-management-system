@@ -5,7 +5,8 @@
   "description": "Complete ProjectFlow project-management system",
   "scripts": {
     "backend": "npm --prefix backend run dev",
-    "frontend": "npm --prefix frontend run dev"
+    "frontend": "npm --prefix frontend run dev",
+    "build": "cd frontend && npm install && npm run build"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
