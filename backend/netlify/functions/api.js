@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcryptjs';
+import serverless from 'serverless-http';
 
 import { connectDB } from '../../config/db.js';
 import User from '../../models/User.js';
@@ -32,6 +33,7 @@ app.use('/api/inventory', inventoryRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err);
+
   res.status(500).json({
     message: 'Server error'
   });
@@ -70,18 +72,24 @@ async function initialize() {
   dbInitialized = true;
 }
 
-const handler = async (req, res) => {
+const serverlessHandler = serverless(app);
+
+export async function handler(event, context) {
   try {
     await initialize();
 
-    return app(req, res);
+    return await serverlessHandler(event, context);
   } catch (error) {
     console.error(error);
 
-    return res.status(500).json({
-      message: 'Database/server initialization failed'
-    });
+    return {
+      statusCode: 500,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: 'Database/server initialization failed'
+      })
+    };
   }
-};
-
-export { handler };
+}
