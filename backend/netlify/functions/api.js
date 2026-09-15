@@ -37,10 +37,10 @@ app.use((err, req, res, next) => {
   });
 });
 
-let initialized = false;
+let dbInitialized = false;
 
 async function initialize() {
-  if (initialized) return;
+  if (dbInitialized) return;
 
   await connectDB();
 
@@ -67,12 +67,13 @@ async function initialize() {
     await existing.save();
   }
 
-  initialized = true;
+  dbInitialized = true;
 }
 
 const handler = async (req, res) => {
   try {
     await initialize();
+
     return app(req, res);
   } catch (error) {
     console.error(error);
