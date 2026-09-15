@@ -25,8 +25,8 @@ Backend: http://localhost:5000
 
 The server creates only one admin account if it does not already exist:
 - Email: admin@projectflow.com
-- Password: Admin@12345
-
+- Password: Admin@1234
+- 
 Change these values in `backend/.env` before first run if desired.
 
 ## Start frontend
