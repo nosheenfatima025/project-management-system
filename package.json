@@ -1,0 +1,10 @@
+{
+  "name": "projectflow-complete",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Complete ProjectFlow project-management system",
+  "scripts": {
+    "backend": "npm --prefix backend run dev",
+    "frontend": "npm --prefix frontend run dev"
+  }
+}

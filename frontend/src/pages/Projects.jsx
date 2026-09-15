@@ -1,0 +1,16 @@
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  FolderKanban, CheckSquare, Users, BarChart3, Search, Mail,
+  LockKeyhole, Eye, EyeOff, ShieldCheck, Zap, Smartphone, Headphones,
+  ArrowRight, TrendingUp, CheckCircle2, Package, Plus, Pencil, Trash2
+} from 'lucide-react';
+import api from '../services/api';
+import { getUser, isAdmin } from '../lib/auth';
+import PageHead from '../components/PageHead';
+import StatCard from '../components/StatCard';
+import AuthShell from '../components/AuthShell';
+
+function Projects(){const [items,setItems]=useState([]);const [form,setForm]=useState({name:'',description:'',category:'Development',dueDate:''});const [show,setShow]=useState(false);const [query,setQuery]=useState('');const load=()=>api.get('/projects').then(r=>setItems(r.data||[])).catch(e=>alert(e.response?.data?.message||'Unable to load projects'));useEffect(()=>{load()},[]);const filtered=items.filter(p=>p.name.toLowerCase().includes(query.toLowerCase()));const add=async e=>{e.preventDefault();try{await api.post('/projects',form);setForm({name:'',description:'',category:'Development',dueDate:''});setShow(false);load()}catch(err){alert(err.response?.data?.message||'Only admin can create projects')}};const remove=async id=>{if(!isAdmin()||!confirm('Delete this project?'))return;try{await api.delete('/projects/'+id);load()}catch(err){alert(err.response?.data?.message||'Delete failed')}};return <><PageHead title="Projects" sub="Manage projects using live database records." action={isAdmin()&&<button className="primary-btn" onClick={()=>setShow(!show)}><Plus size={16}/> New Project</button>}/>{show&&<form className="panel form-panel" onSubmit={add}><h2>Create Project</h2><div className="form-grid"><input required placeholder="Project name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})}/><input placeholder="Category" value={form.category} onChange={e=>setForm({...form,category:e.target.value})}/><input type="date" value={form.dueDate} onChange={e=>setForm({...form,dueDate:e.target.value})}/><input placeholder="Description" value={form.description} onChange={e=>setForm({...form,description:e.target.value})}/></div><button className="primary-btn">Save Project</button></form>}<div className="panel"><div className="task-toolbar"><div className="search-box"><Search size={16}/><input placeholder="Search projects..." value={query} onChange={e=>setQuery(e.target.value)}/></div><span>{filtered.length} project(s)</span></div><div className="project-grid">{filtered.map(p=><div className="project-card" key={p._id}><div className="project-card-top"><div className="project-thumb teal"><FolderKanban size={19}/></div>{isAdmin()&&<button className="dots" onClick={()=>remove(p._id)}><Trash2 size={16}/></button>}</div><h3>{p.name}</h3><small>{p.category}</small><p>{p.description||'No description provided.'}</p><div className="bar large"><i style={{width:`${p.progress||0}%`}}/></div><div className="project-meta"><span>{p.progress||0}%</span><span>{p.status}</span></div></div>)}{!filtered.length&&<div className="empty-state">No projects found in database.</div>}</div></div></>}
+
+export default Projects;

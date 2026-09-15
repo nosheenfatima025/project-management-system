@@ -1,0 +1,11 @@
+import express from 'express';
+import Project from '../models/Project.js';
+import { protect, adminOnly } from '../middleware/auth.js';
+const router = express.Router();
+router.use(protect);
+const scope = (req) => req.user.role === 'admin' ? {} : { $or: [{ owner: req.user._id }, { members: req.user._id }] };
+router.get('/', async (req, res) => { try { res.json(await Project.find(scope(req)).populate('members', 'name email role').populate('owner', 'name email').sort('-createdAt')); } catch (e) { res.status(500).json({ message: e.message }); } });
+router.post('/', adminOnly, async (req, res) => { try { const p = await Project.create({ name: req.body.name, description: req.body.description || '', category: req.body.category || 'Development', status: req.body.status || 'Active', progress: Number(req.body.progress || 0), dueDate: req.body.dueDate || undefined, members: req.body.members || [], owner: req.user._id }); res.status(201).json(await p.populate('members', 'name email role')); } catch (e) { res.status(400).json({ message: e.message }); } });
+router.put('/:id', async (req, res) => { try { const filter = req.user.role === 'admin' ? { _id: req.params.id } : { _id: req.params.id, members: req.user._id }; const data = {}; ['name','description','category','status','progress','dueDate','members'].forEach(k => { if (req.body[k] !== undefined) data[k] = req.body[k]; }); const p = await Project.findOneAndUpdate(filter, data, { new: true, runValidators: true }).populate('members', 'name email role'); if (!p) return res.status(404).json({ message: 'Project not found or access denied' }); res.json(p); } catch (e) { res.status(400).json({ message: e.message }); } });
+router.delete('/:id', adminOnly, async (req, res) => { const p = await Project.findByIdAndDelete(req.params.id); if (!p) return res.status(404).json({ message: 'Project not found' }); res.json({ message: 'Project deleted' }); });
+export default router;
