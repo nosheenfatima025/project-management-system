@@ -2,13 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcryptjs';
 
-import { connectDB } from '../../config/db.js';
-import User from '../../models/User.js';
+import { connectDB } from './config/db.js';
+import User from './models/User.js';
 
-import authRoutes from '../../routes/auth.js';
-import projectRoutes from '../../routes/projects.js';
-import taskRoutes from '../../routes/tasks.js';
-import inventoryRoutes from '../../routes/inventory.js';
+import authRoutes from './routes/auth.js';
+import projectRoutes from './routes/projects.js';
+import taskRoutes from './routes/tasks.js';
+import inventoryRoutes from './routes/inventory.js';
 
 const app = express();
 
@@ -32,6 +32,7 @@ app.use('/api/inventory', inventoryRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err);
+
   res.status(500).json({
     message: 'Server error'
   });
@@ -70,17 +71,17 @@ async function initialize() {
   initialized = true;
 }
 
-const handler = async (req, res) => {
+app.use(async (req, res, next) => {
   try {
     await initialize();
-    return app(req, res);
+    next();
   } catch (error) {
     console.error(error);
 
-    return res.status(500).json({
+    res.status(500).json({
       message: 'Database/server initialization failed'
     });
   }
-};
+});
 
-export { handler };
+export default app;
